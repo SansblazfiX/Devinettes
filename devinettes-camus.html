@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Qui suis-je ? — Lycées Albert Camus</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --pink: #E8336D;
+    --pink-light: #fce8f0;
+    --green: #1a7a5e;
+    --green-light: #e2f4ee;
+    --yellow: #f5c800;
+    --bg: #faf8f5;
+    --text: #1a1a18;
+    --muted: #6b6b64;
+    --border: #e2e0d8;
+    --card: #ffffff;
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* HEADER */
+  header {
+    background: var(--text);
+    color: #fff;
+    padding: 2rem 1.5rem 1.5rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  header::before {
+    content: '';
+    position: absolute;
+    top: -40px; right: -40px;
+    width: 160px; height: 160px;
+    border-radius: 50%;
+    background: var(--pink);
+    opacity: 0.15;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -30px; left: -20px;
+    width: 100px; height: 100px;
+    border-radius: 50%;
+    background: var(--yellow);
+    opacity: 0.12;
+  }
+
+  .header-badge {
+    display: inline-block;
+    background: var(--pink);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 5px 14px;
+    border-radius: 20px;
+    margin-bottom: 1rem;
+  }
+
+  header h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: clamp(2rem, 8vw, 3rem);
+    line-height: 1.1;
+    margin-bottom: 0.5rem;
+  }
+
+  header h1 em {
+    font-style: italic;
+    color: var(--yellow);
+  }
+
+  header p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.65);
+    max-width: 320px;
+    margin: 0 auto;
+    line-height: 1.6;
+  }
+
+  /* INTRO */
+  .intro {
+    background: var(--yellow);
+    padding: 1.25rem 1.5rem;
+    text-align: center;
+  }
+
+  .intro p {
+    font-size: 14px;
+    font-weight: 500;
+    color: #3a2e00;
+    line-height: 1.5;
+  }
+
+  /* MAIN */
+  main {
+    padding: 1.5rem 1rem 4rem;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  /* PROFILE TABS */
+  .tabs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-bottom: 1.5rem;
+  }
+
+  .tab-btn {
+    padding: 14px 10px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    background: var(--card);
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--muted);
+    transition: all 0.2s;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+
+  .tab-btn .tab-number {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 16px;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+
+  .tab-btn.active {
+    border-color: var(--pink);
+    color: var(--pink);
+  }
+
+  .tab-btn.active .tab-number {
+    background: var(--pink);
+    color: #fff;
+  }
+
+  .tab-btn.solved {
+    border-color: var(--green);
+    color: var(--green);
+  }
+
+  .tab-btn.solved .tab-number {
+    background: var(--green);
+    color: #fff;
+  }
+
+  /* GAME PANEL */
+  .game-panel { display: none; }
+  .game-panel.active { display: block; }
+
+  .panel-label {
+    font-size: 11px;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 1rem;
+  }
+
+  /* PROGRESS */
+  .progress-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 1.25rem;
+  }
+
+  .progress-track {
+    flex: 1;
+    height: 6px;
+    background: var(--border);
+    border-radius: 3px;
+    overflow: hidden;
+  }
+
+  .progress-fill {
+    height: 100%;
+    background: var(--pink);
+    border-radius: 3px;
+    transition: width 0.4s cubic-bezier(.4,0,.2,1);
+  }
+
+  .progress-label {
+    font-size: 12px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  /* INDICES */
+  .indices { margin-bottom: 1.5rem; }
+
+  .indice-card {
+    background: var(--card);
+    border: 1.5px solid var(--border);
+    border-radius: 14px;
+    padding: 14px 16px;
+    margin-bottom: 10px;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.35s ease, transform 0.35s ease;
+  }
+
+  .indice-card.show {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .indice-card.last {
+    border-color: var(--pink);
+    background: var(--pink-light);
+  }
+
+  .indice-dot {
+    min-width: 28px; height: 28px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 1px;
+  }
+
+  .indice-card.last .indice-dot {
+    background: var(--pink);
+    border-color: var(--pink);
+    color: #fff;
+  }
+
+  .indice-text {
+    font-size: 15px;
+    line-height: 1.55;
+    color: var(--text);
+    padding-top: 3px;
+  }
+
+  /* ACTIONS */
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-bottom: 1.5rem;
+  }
+
+  .btn-next {
+    width: 100%;
+    padding: 15px;
+    background: var(--pink);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: transform 0.15s, background 0.15s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+
+  .btn-next:hover { background: #c8285c; }
+  .btn-next:active { transform: scale(0.98); }
+  .btn-next:disabled { background: var(--border); color: var(--muted); cursor: not-allowed; }
+
+  .btn-answer {
+    width: 100%;
+    padding: 12px;
+    background: transparent;
+    color: var(--muted);
+    border: 1.5px solid var(--border);
+    border-radius: 12px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+
+  .btn-answer:hover { border-color: var(--green); color: var(--green); }
+
+  .btn-reset {
+    width: 100%;
+    padding: 10px;
+    background: transparent;
+    color: var(--muted);
+    border: none;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 13px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  /* ANSWER */
+  .answer-reveal {
+    display: none;
+    background: var(--green-light);
+    border: 2px solid var(--green);
+    border-radius: 16px;
+    padding: 20px 18px;
+    text-align: center;
+    animation: popIn 0.3s cubic-bezier(.4,0,.2,1);
+  }
+
+  .answer-reveal.show { display: block; }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+  }
+
+  .answer-check {
+    width: 44px; height: 44px;
+    border-radius: 50%;
+    background: var(--green);
+    margin: 0 auto 12px;
+    display: flex; align-items: center; justify-content: center;
+  }
+
+  .answer-check svg { width: 22px; height: 22px; stroke: #fff; fill: none; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+
+  .answer-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.6rem;
+    color: var(--green);
+    margin-bottom: 4px;
+  }
+
+  .answer-role {
+    font-size: 13px;
+    color: #2a7a5e;
+    line-height: 1.5;
+  }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 12px;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+  }
+
+  footer span {
+    font-family: 'DM Serif Display', serif;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-badge">Lycées Albert Camus</div>
+  <h1>Qui suis-<em>je</em>&nbsp;?</h1>
+  <p>Lis les indices un à un et découvre quel ancien élève se cache derrière chaque profil.</p>
+</header>
+
+<div class="intro">
+  <p>🔍 &nbsp;2 anciens élèves à identifier — les indices se dévoilent progressivement</p>
+</div>
+
+<main>
+  <div class="tabs">
+    <button class="tab-btn active" id="tab-1" onclick="switchTab(1)">
+      <span class="tab-number">1</span>
+      Profil nº&nbsp;1
+    </button>
+    <button class="tab-btn" id="tab-2" onclick="switchTab(2)">
+      <span class="tab-number">2</span>
+      Profil nº&nbsp;2
+    </button>
+  </div>
+
+  <!-- PROFIL 1 : Laura Serodio -->
+  <div class="game-panel active" id="panel-1">
+    <p class="panel-label">Indices — profil nº&nbsp;1</p>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="prog-1" style="width:0%"></div></div>
+      <span class="progress-label" id="plabel-1">0 / 5</span>
+    </div>
+    <div class="indices" id="indices-1"></div>
+    <div class="actions">
+      <button class="btn-next" id="btn-next-1" onclick="revealNext(1)">
+        Révéler l'indice suivant
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 9l5 5 5-5"/></svg>
+      </button>
+      <button class="btn-answer" onclick="showAnswer(1)">J'abandonne — voir la réponse</button>
+      <button class="btn-reset" onclick="resetGame(1)">Recommencer</button>
+    </div>
+    <div class="answer-reveal" id="answer-1">
+      <div class="answer-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="answer-name">Laura Serodio</div>
+      <div class="answer-role">Cheffe de projets biodiversité marine<br>Baccalauréat S — Session 2018</div>
+    </div>
+  </div>
+
+  <!-- PROFIL 2 : Oualid Sahtout -->
+  <div class="game-panel" id="panel-2">
+    <p class="panel-label">Indices — profil nº&nbsp;2</p>
+    <div class="progress-row">
+      <div class="progress-track"><div class="progress-fill" id="prog-2" style="width:0%"></div></div>
+      <span class="progress-label" id="plabel-2">0 / 5</span>
+    </div>
+    <div class="indices" id="indices-2"></div>
+    <div class="actions">
+      <button class="btn-next" id="btn-next-2" onclick="revealNext(2)">
+        Révéler l'indice suivant
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 9l5 5 5-5"/></svg>
+      </button>
+      <button class="btn-answer" onclick="showAnswer(2)">J'abandonne — voir la réponse</button>
+      <button class="btn-reset" onclick="resetGame(2)">Recommencer</button>
+    </div>
+    <div class="answer-reveal" id="answer-2">
+      <div class="answer-check"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <div class="answer-name">Oualid Sahtout</div>
+      <div class="answer-role">Responsable de la communication interministérielle<br>BTS MUC — Session 2009/2010</div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <span>Des parcours pour tous les projets</span> — Lycées Albert Camus
+</footer>
+
+<script>
+const data = {
+  1: [
+    "J'ai obtenu un baccalauréat scientifique.",
+    "Après le bac, je me suis orienté·e vers les sciences du vivant à l'université.",
+    "Je me suis rapidement spécialisé·e dans un domaine qui touche à la fois l'écologie et le monde naturel sauvage.",
+    "J'ai réalisé plusieurs stages en laboratoire de recherche pour comprendre des écosystèmes très particuliers.",
+    "Aujourd'hui, je travaille à la préservation et à la restauration de zones côtières. L'un de mes prochains projets m'emmènera en Grèce pour observer des mammifères marins."
+  ],
+  2: [
+    "Avant de reprendre des études, j'avais déjà plusieurs années d'expérience dans le monde professionnel.",
+    "J'ai décroché un BTS au lycée Albert Camus, puis poursuivi vers un Bachelor dans une grande école de commerce.",
+    "Mon master de spécialisation porte sur la communication. J'ai effectué mes alternances dans des entreprises connues du grand public.",
+    "Mon métier m'a amené·e à travailler dans plusieurs régions de France, aux côtés de représentants de l'État.",
+    "Je suis parti·e en mission à Mayotte suite à une catastrophe naturelle pour gérer la communication de crise."
+  ]
+};
+
+const state = { 1: 0, 2: 0 };
+
+function renderIndices(id) {
+  const container = document.getElementById('indices-' + id);
+  container.innerHTML = '';
+  const total = data[id].length;
+  const count = state[id];
+
+  data[id].slice(0, count).forEach((text, i) => {
+    const card = document.createElement('div');
+    const isLast = i === total - 1;
+    card.className = 'indice-card' + (isLast ? ' last' : '');
+    card.innerHTML = `<div class="indice-dot">${i + 1}</div><div class="indice-text">${text}</div>`;
+    container.appendChild(card);
+    requestAnimationFrame(() => requestAnimationFrame(() => card.classList.add('show')));
+  });
+
+  const pct = Math.round((count / total) * 100);
+  document.getElementById('prog-' + id).style.width = pct + '%';
+  document.getElementById('plabel-' + id).textContent = count + ' / ' + total;
+
+  const btn = document.getElementById('btn-next-' + id);
+  if (count >= total) {
+    btn.disabled = true;
+    btn.innerHTML = 'Tous les indices révélés';
+  } else {
+    btn.disabled = false;
+    btn.innerHTML = 'Révéler l\'indice suivant <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M8 3v10M3 9l5 5 5-5"/></svg>';
+  }
+}
+
+function revealNext(id) {
+  if (state[id] < data[id].length) {
+    state[id]++;
+    renderIndices(id);
+  }
+}
+
+function showAnswer(id) {
+  document.getElementById('answer-' + id).classList.add('show');
+  document.getElementById('tab-' + id).classList.add('solved');
+}
+
+function resetGame(id) {
+  state[id] = 0;
+  document.getElementById('answer-' + id).classList.remove('show');
+  document.getElementById('tab-' + id).classList.remove('solved');
+  renderIndices(id);
+}
+
+function switchTab(id) {
+  document.querySelectorAll('.game-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    if (!b.classList.contains('solved')) b.classList.remove('active');
+  });
+  document.getElementById('panel-' + id).classList.add('active');
+  document.getElementById('tab-' + id).classList.add('active');
+}
+
+renderIndices(1);
+renderIndices(2);
+</script>
+</body>
+</html>
